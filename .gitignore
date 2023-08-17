@@ -1,0 +1,29 @@
+# Rust/Cargo generated files
+/target/
+Cargo.lock
+**/*.rs.bk
+
+# Visual Studio Code
+.vscode/
+
+# IntelliJ IDEA
+.idea/
+
+# Compiled binary
+**/target/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Rust Language Server
+.rustc_info.json
+
+# Crates.io API token
+~/.cargo/credentials
+
+# Temp files
+*.swp
+*.bak

@@ -14,17 +14,17 @@ pub enum NodeColor {
     Black,
 }
 #[derive(Debug, Clone)]
-pub struct Node {
+pub struct Node <T: std::cmp::Ord> {
     pub key: DollarValue,
     pub val: u32,
     pub node_color: NodeColor,
-    pub left: Arc<RwLock<NodeType>>,
-    pub right: Arc<RwLock<NodeType>>,
-    pub parent: Arc<RwLock<NodeType>>,
+    pub left: Arc<RwLock<NodeType<T>>>,
+    pub right: Arc<RwLock<NodeType<T>>>,
+    pub parent: Arc<RwLock<NodeType<T>>>,
 }
 
-impl From<NodeType> for Node {
-    fn from(value: NodeType) -> Self {
+impl <T: std::cmp::Ord> From<NodeType<T>> for Node <T> {
+    fn from(value: NodeType<T>) -> Self {
         
         let parent = Arc::new(RwLock::new(NodeType::Empty));
         
@@ -42,11 +42,11 @@ impl From<NodeType> for Node {
     }
 }
 
-impl Node {
+impl <T: std::cmp::Ord> Node <T> {
     pub fn new(
         key: DollarValue,
         val: u32,
-        parent: Arc<RwLock<NodeType>>,
+        parent: Arc<RwLock<NodeType<T>>>,
         node_color: NodeColor,
     ) -> Self {
         Node {
@@ -64,19 +64,19 @@ impl Node {
 
     
     
-    pub fn set_left_child(self, left_child: NodeType) {
+    pub fn set_left_child(self, left_child: NodeType<T>) {
         let mut unlocked_left_child = self.left.write().unwrap();
         *unlocked_left_child = left_child;
         drop(unlocked_left_child)
     }
 
-    pub fn set_right_child(self, right_child: NodeType) {
+    pub fn set_right_child(self, right_child: NodeType<T>) {
         let mut unlocked_right_child = self.right.write().unwrap();
         *unlocked_right_child = right_child;
         drop(unlocked_right_child)
     }
 
-    pub fn set_parent(self, new_par: NodeType) {
+    pub fn set_parent(self, new_par: NodeType<T>) {
         let mut unlocked_parent = self.parent.write().unwrap();
         *unlocked_parent = new_par;
     }

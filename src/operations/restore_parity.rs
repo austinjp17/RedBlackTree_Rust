@@ -14,7 +14,7 @@ use std::{
 use tracing::{info, trace, error, debug};
 
 
-impl RedBlackTree {
+impl <T: std::cmp::Ord> RedBlackTree <T> {
     #[tracing::instrument]
     pub fn insertion_restore(&mut self, target_key: DollarValue) {
         

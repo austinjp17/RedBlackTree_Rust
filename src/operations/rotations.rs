@@ -9,22 +9,22 @@ use crate::{
 
 use std::sync::{Arc, RwLock};
 
-impl RedBlackTree {
+impl <T: std::cmp::Ord> RedBlackTree <T> {
 
-    pub fn right_left_rotation(&mut self, pusher_lock: Arc<RwLock<NodeType>>) {
+    pub fn right_left_rotation(&mut self, pusher_lock: Arc<RwLock<NodeType<T>>>) {
         // ! Pusher Read Taken && Dropped
         let pusher_node_type = pusher_lock.read().unwrap();
         let pusher_node = Node::from(pusher_node_type.clone());
         drop(pusher_node_type);
 
         // ! Par Read Taken && Dropped
-        let par_lock = pusher_node.parent;
+        let par_lock: Arc<RwLock<NodeType<T>>> = pusher_node.parent;
         let par_type = par_lock.read().unwrap();
         let par_node = Node::from(par_type.clone());
         drop(par_type);
 
         // ! GP Read Taken && Dropped
-        let gp_lock = par_node.parent;
+        let gp_lock: Arc<RwLock<NodeType<T>>> = par_node.parent;
         let gp_type = gp_lock.read().unwrap();
         let gp_node = Node::from(gp_type.clone());
         drop(gp_type);
@@ -64,6 +64,7 @@ impl RedBlackTree {
             NodeColor::Red
         );
 
+        // ! GP Read Taken && Dropped
         let new_par_lock = Arc::clone(&gp_node.parent);
         let new_par_type = new_par_lock.read().unwrap();
         match &*new_par_type {
@@ -78,7 +79,7 @@ impl RedBlackTree {
 
     }
 
-    pub fn left_right_rotation(&mut self, pusher_lock: Arc<RwLock<NodeType>>) {
+    pub fn left_right_rotation(&mut self, pusher_lock: Arc<RwLock<NodeType<T>>>) {
         
 
         // ! Pusher Read Taken && Dropped
@@ -87,13 +88,13 @@ impl RedBlackTree {
         drop(pusher_node_type);
 
         // ! Par Read Taken && Dropped
-        let par_lock = pusher_node.parent;
+        let par_lock: Arc<RwLock<NodeType<T>>> = pusher_node.parent;
         let par_type = par_lock.read().unwrap();
         let par_node = Node::from(par_type.clone());
         drop(par_type);
 
         // ! GP Read Taken && Dropped
-        let gp_lock = par_node.parent;
+        let gp_lock: Arc<RwLock<NodeType<T>>> = par_node.parent;
         let gp_type = gp_lock.read().unwrap();
         let gp_node = Node::from(gp_type.clone());
         drop(gp_type);
@@ -181,7 +182,7 @@ impl RedBlackTree {
 
     }
 
-    pub fn right_rotation(&mut self, pusher_lock: Arc<RwLock<NodeType>>) {
+    pub fn right_rotation(&mut self, pusher_lock: Arc<RwLock<NodeType<T>>>) {
         
         // ! Pusher Read Taken && Dropped
         let pusher_node_type = pusher_lock.read().unwrap();
@@ -189,13 +190,13 @@ impl RedBlackTree {
         drop(pusher_node_type);
 
         // ! Par Read Taken && Dropped
-        let par_lock = pusher_node.parent;
+        let par_lock: Arc<RwLock<NodeType<T>>> = pusher_node.parent;
         let par_type = par_lock.read().unwrap();
         let par_node = Node::from(par_type.clone());
         drop(par_type);
         
         // ! GP Read Taken && Dropped
-        let gp_lock = par_node.parent;
+        let gp_lock: Arc<RwLock<NodeType<T>>> = par_node.parent;
         let gp_type = gp_lock.read().unwrap();
         let gp_node = Node::from(gp_type.clone());
         drop(gp_type);
@@ -252,7 +253,7 @@ impl RedBlackTree {
         // self.assign_root();
     }
 
-    pub fn left_rotation(&mut self, pusher_lock: Arc<RwLock<NodeType>>) {
+    pub fn left_rotation(&mut self, pusher_lock: Arc<RwLock<NodeType<T>>>) {
         
         // Q: NODES ARE MEMORY CLONES SO CHANGES WON'T AFFECT TREE?
         // is dereference copying?
@@ -263,14 +264,14 @@ impl RedBlackTree {
         drop(pusher_node_type);
 
         // ! Parent Read Lock Taken && Dropped
-        let parent_lock = Arc::clone(&pusher_node.parent);
+        let parent_lock: Arc<RwLock<NodeType<T>>> = Arc::clone(&pusher_node.parent);
         let parent_node_type = parent_lock.read().unwrap();
         let parent_node = Node::from(parent_node_type.clone());
         drop(parent_node_type);
 
         // Must drop parent read before getting gp write or will deadlock
         // ! GP Read lock taken && dropped
-        let gp_lock = Arc::clone(&parent_node.parent);
+        let gp_lock: Arc<RwLock<NodeType<T>>> = Arc::clone(&parent_node.parent);
         let gp_node_type = gp_lock.read().unwrap();
         let gp_node = Node::from(gp_node_type.clone());
         drop(gp_node_type);

@@ -10,8 +10,8 @@ use std::{
     collections::VecDeque,
 };
 
-impl RedBlackTree {
-    pub fn search(&mut self, target_key: DollarValue) -> Option<Arc<RwLock<NodeType>>> {
+impl <T: std::cmp::Ord> RedBlackTree <T> {
+    pub fn search(&mut self, target_key: DollarValue) -> Option<Arc<RwLock<NodeType<T>>>> {
         let mut queue: VecDeque<Arc<RwLock<NodeType>>> = VecDeque::new();
 
         queue.push_back(Arc::clone(&self.head));

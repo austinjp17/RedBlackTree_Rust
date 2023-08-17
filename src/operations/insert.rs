@@ -25,7 +25,7 @@ impl InsertForm {
 }
 
 
-impl RedBlackTree {
+impl <T: std::cmp::Ord> RedBlackTree <T> {
     pub fn handle_insert(&mut self, params: InsertForm) {
         let _ = self.b_tree_insert(params.key.clone(), params.val);
         self.insertion_restore(params.key);

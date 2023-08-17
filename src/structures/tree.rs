@@ -2,10 +2,10 @@ use std::sync::{Arc, RwLock};
 use crate::structures::node_container::NodeType;
 
 #[derive(Debug)]
-pub struct RedBlackTree {
-    pub head: Arc<RwLock<NodeType>>,
+pub struct RedBlackTree <T: std::cmp::Ord> {
+    pub head: Arc<RwLock<NodeType<T>>>,
 }
-impl RedBlackTree {
+impl <T: std::cmp::Ord> RedBlackTree <T> {
     pub fn new() -> Self {
         RedBlackTree {
             head: Arc::new(RwLock::new(NodeType::Empty)),

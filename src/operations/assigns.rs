@@ -1,11 +1,8 @@
-use crate::{
-    DollarValue,  
-    structures::{
-        active_node::{Node, NodeColor},
-        node_container::NodeType,
-        tree::RedBlackTree,
-    }
- };
+use crate::structures::{
+    active_node::{Node, NodeColor},
+    node_container::NodeType,
+    tree::RedBlackTree,
+};
 use anyhow::{anyhow, Result};
 use std::{
     collections::VecDeque,
@@ -14,9 +11,9 @@ use std::{
 use tracing::{info, trace, error, debug};
 
 
-impl RedBlackTree {
+impl <T: std::cmp::Ord> RedBlackTree <T> {
     pub fn assign_color (
-        target_lock: Arc<RwLock<NodeType>>,
+        target_lock: Arc<RwLock<NodeType<T>>>,
         color: NodeColor,
     ) -> Result<()> {
         let mut target_type = target_lock.write().unwrap();
@@ -27,8 +24,8 @@ impl RedBlackTree {
     }
     
     pub fn assign_left_child(
-        target_node_lock: Arc<RwLock<NodeType>>,
-        new_left_child: Arc<RwLock<NodeType>>,
+        target_node_lock: Arc<RwLock<NodeType<T>>>,
+        new_left_child: Arc<RwLock<NodeType<T>>>,
     ) -> Result<()> {
         let mut target_node_type = target_node_lock.write().unwrap();
         let res = match &*target_node_type {
@@ -48,8 +45,8 @@ impl RedBlackTree {
     }
     
     pub fn assign_right_child(
-        target_node_lock: Arc<RwLock<NodeType>>,
-        new_right_child: Arc<RwLock<NodeType>>,
+        target_node_lock: Arc<RwLock<NodeType<T>>>,
+        new_right_child: Arc<RwLock<NodeType<T>>>,
     ) -> Result<()> {
         let mut target_node_type = target_node_lock.write().unwrap();
         let res = match &*target_node_type {
@@ -68,8 +65,8 @@ impl RedBlackTree {
     }
     
     pub fn assign_parent(
-        target_node_lock: Arc<RwLock<NodeType>>,
-        new_parent: Arc<RwLock<NodeType>>,
+        target_node_lock: Arc<RwLock<NodeType<T>>>,
+        new_parent: Arc<RwLock<NodeType<T>>>,
     ) -> Result<()> {
         let mut target_node_type = target_node_lock.write().unwrap();
         let res = match &*target_node_type {
@@ -87,7 +84,7 @@ impl RedBlackTree {
         Err(anyhow!("Error assigning parent"))
     }
     
-    pub fn assign_root(&mut self, new_head: Arc<RwLock<NodeType>>) {
+    pub fn assign_root(&mut self, new_head: Arc<RwLock<NodeType<T>>>) {
         self.head = new_head;
     }
 }
